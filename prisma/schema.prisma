@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Rol {
+  id        Int       @id @default(autoincrement())
+  nombre    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  users     Usuario[]
+  permisos  Permiso[] @relation("rol_permisos")
+
+  @@map("roles")
+}
+
+model Usuario {
+  id          Int          @id @default(autoincrement())
+  nombre      String
+  email       String       @unique
+  password    String
+  rol_id       Int
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  rol         Rol          @relation(fields: [rol_id], references: [id])
+
+  @@map("usuarios")
+}
+
+model Permiso {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  roles     Rol[]    @relation("rol_permisos")
+
+  @@map("permisos")
+}
+
+model Bitacora_usuario {
+  id          Int      @id @default(autoincrement())
+  ip          String
+  tipo_sesion String
+  username    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  usuarioId   Int
+
+  @@map("bitacora_usuarios")
+}
+
