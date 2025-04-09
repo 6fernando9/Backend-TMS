@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { prismaClient } from "..";
 import { UpdateUserSchema } from "../schemas/user-schema";
 import { BadRequestException } from "../exceptions/bad-request";
-import { ErrorCode } from "../exceptions/root";
 import { compare, hashSync } from "bcrypt";
 import { NotFoundException } from "../exceptions/not-found";
 
@@ -11,7 +10,7 @@ export const UpdateAuthenticatedUser = async (req: Request, res: Response,next: 
         console.log(req.body)
         const validatedData = UpdateUserSchema.parse(req.body);
     } catch (error) {
-        throw new BadRequestException("Error datos no validos..",ErrorCode.ERROR_BAD_REQUEST);
+        throw new BadRequestException("Error datos no validos..");
     }
     const { nombre, email, password, rol_id } = req.body;
     console.log(nombre,email)
@@ -31,7 +30,7 @@ export const UpdateAuthenticatedUser = async (req: Request, res: Response,next: 
         }
     });
     if(!rol){
-        throw new NotFoundException("Error..Rol no encontrado...",ErrorCode.ROL_NO_ENCONTRADO);
+        throw new NotFoundException("Error..Rol no encontrado...");
     }
     const usuarioActualizado = await prismaClient.usuario.update({
         where:{

@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { CreatePermissionSchema } from "../schemas/permiso-schema";
 import { prismaClient } from "..";
 import { BadRequestException } from "../exceptions/bad-request";
-import { ErrorCode } from "../exceptions/root";
 import { NotFoundException } from "../exceptions/not-found";
 
 
@@ -16,7 +15,7 @@ export const createPermission =async (req: Request, res: Response,next: NextFunc
         });
         res.json({permission, message:"permiso creado con exito"})
     } catch (error) {
-        throw new BadRequestException("Error Formato de Permiso no valido",ErrorCode.PERMISO_FORMATO_NO_VALIDO);
+        throw new BadRequestException("Error Formato de Permiso no valido");
     }
 }
 
@@ -31,16 +30,16 @@ export const updatePermission = async (req: Request, res: Response,next: NextFun
         });
         res.json({ permission, message: "permiso actualizado con exito" });
     } catch (error) {
-        throw new BadRequestException("Error Formato de Permiso no valido",ErrorCode.PERMISO_FORMATO_NO_VALIDO);
+        throw new BadRequestException("Error Formato de Permiso no valido");
     }
 }
 
 export const deletePermission = async (req: Request, res: Response,next: NextFunction) => {
-        const permission =await prismaClient.permiso.findFirstOrThrow({
+        const permission =await prismaClient.permiso.findFirst({
           where: { id: +req.params.id },
         });
         if(!permission){
-            throw new NotFoundException("Error Formato de Permiso no valido",ErrorCode.PERMISO_NOT_FOUND);
+            throw new NotFoundException("Error Formato de Permiso no valido");
         }
         await prismaClient.permiso.delete({
           where:{id: permission.id},
@@ -52,3 +51,4 @@ export const deletePermission = async (req: Request, res: Response,next: NextFun
 export const listAllPermission = async (req: Request, res: Response,next: NextFunction) => {
     res.json(await prismaClient.permiso.findMany());
 }
+

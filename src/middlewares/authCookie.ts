@@ -4,7 +4,7 @@
 // import { prismaClient } from "..";
 // import { UnauthorizedException } from "../exceptions/unauthorized";
 // import { BadRequestException } from "../exceptions/bad-request";
-// import { ErrorCode } from "../exceptions/root";
+
 // import { NotFoundException } from "../exceptions/not-found";
 
 // // middleware para ver si el usuario tiene un jwt valido
@@ -17,7 +17,7 @@
 //   if (!token) {
 //     //crearemos una exception
 //     console.log("No tiene token");
-//     next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
+//     throw new UnauthorizedException("Unauthorized");
 //   }
 //   //si esta presente, entonces lo decodificaremos
 //   try {
@@ -25,7 +25,7 @@
 //     const payload = jwt.verify(token!, JWT_SECRET_KEY) as any;
 
 //     //obtendremos al usuario del jwt
-//     const usuarioDelJwt = await prismaClient.usuario.findFirstOrThrow({
+//     const usuarioDelJwt = await prismaClient.usuario.findFirst({
 //       where: {
 //         id: payload.sub,
 //       },include:{
@@ -34,19 +34,15 @@
 //     });
 
 //     if (!usuarioDelJwt) {
-//       next(
-//         new NotFoundException(
-//           "Error Usuario No Encontrado..",
-//           ErrorCode.USUARIO_NO_ENCONTRADO
-//         )
-//       );
+//         throw new NotFoundException("Error Usuario No Encontrado..")
+
 //     }
 //     //lo agregamos a los request para poder usarlo donde sea
 //     req.usuario = usuarioDelJwt;
 
 //     next();
 //   } catch (error) {
-//     next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
+//     throw new UnauthorizedException("Unauthorized");
 //   }
 // };
 // export default authCookie;

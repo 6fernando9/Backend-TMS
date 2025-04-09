@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { ErrorCode, HttpException } from "./exceptions/root";
+import {HttpException } from "./exceptions/root";
 import { ZodError } from "zod";
 import { BadRequestException } from "./exceptions/bad-request";
 import { InternalException } from "./exceptions/internal-exception";
@@ -16,12 +16,15 @@ export const errorHandler = (method: AsyncHandler) => {
             //si ocurre un error lo captura
             let exception: HttpException;
             if(error instanceof HttpException){
+                console.log(`me lanze en HttpException> ${error}`)
                 exception = error;
             }else{
                 if(error instanceof ZodError){
-                    exception = new BadRequestException("No Se puede procesar la entidad", ErrorCode.UNPROCCESSABLE_ENTITY);
+                    console.log(`me lanze en zod> ${error}`);
+                    exception = new BadRequestException("No Se puede procesar la entidad");
                 }else{
-                    exception = new InternalException("Algunas cosas salieron mal..",ErrorCode.INTERNAL_EXCEPTION,error);
+                    console.log(`me lanze en Interal> ${error}`);
+                    exception = new InternalException("Algunas cosas salieron mal..",null);
                 }
             }
             //se dirige al middleware de error donde genera el error

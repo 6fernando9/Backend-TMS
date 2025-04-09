@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import { JWT_SECRET_KEY } from "../secrets";
 import * as jwt from 'jsonwebtoken'
 import { NotFoundException } from "../exceptions/not-found";
-import { ErrorCode, Roles, TipoSesion } from "../exceptions/root";
+import { Roles, TipoSesion } from "../exceptions/root";
 import { BadRequestException } from "../exceptions/bad-request";
 import { FoundException } from "../exceptions/found";
 import { usuarioObserver } from "../services/bitacora-observer";
@@ -24,16 +24,14 @@ export const login = async (req: Request, res: Response) => {
   });
   if (!usuario) {
     throw new NotFoundException(
-      "Error Usuario No encontrado..",
-      ErrorCode.USUARIO_NO_ENCONTRADO
+      "Error Usuario No encontrado.."
     );
   }
   //comparamos contrasenias
   const passwordMatch = await compare(password, usuario.password);
   if (!passwordMatch) {
     throw new BadRequestException(
-      "Error contraseña Incorrecta",
-      ErrorCode.INCORRECT_PASSWORD
+      "Error contraseña Incorrecta"
     );
   }
 
@@ -92,9 +90,7 @@ export const register = async (req: Request, res: Response,next: NextFunction) =
   if (usuario) {
     next(
       new FoundException(
-        "Error..usuario ya esta registrado en el sistema",
-        ErrorCode.USUARIO_YA_REGISTRADO
-      )
+        "Error..usuario ya esta registrado en el sistema")
     );
   }
   //si no existe entonces lo creamos
@@ -106,7 +102,6 @@ export const register = async (req: Request, res: Response,next: NextFunction) =
     next(
       new NotFoundException(
         "Error Rol No encontrado...",
-        ErrorCode.ROL_NO_ENCONTRADO
       )
     );
     return;
@@ -170,7 +165,7 @@ const captureIpUser = (req: Request): string => {
     ipUsuario = forwarded.split(",")[0]; // Extraer la primera IP real
   }
   if(!ipUsuario){
-    throw new UnauthorizedException("Error Usuario Sin Ip",ErrorCode.USUARIO_SIN_IP);
+    throw new UnauthorizedException("Error Usuario Sin Ip");
   }
   return ipUsuario;
 }

@@ -7,8 +7,8 @@ import { HttpException } from "../exceptions/root";
 export const errorMiddleware = (error: HttpException, req: Request, res: Response, next: NextFunction ) => {
     res.status(error.statusCode).json({
         mensaje: error.message,
-        errorCode: error.errorCode, // aqui muestro el error personalizado
-        errores: error.errors,
+        // : error., // aqui muestro el error personalizado
+        // errores: error.errors,
         fecha: new Date().toISOString()
     })
 }

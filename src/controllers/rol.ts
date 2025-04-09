@@ -3,7 +3,6 @@ import { CreateRolSchema } from "../schemas/rol-schema";
 import { prismaClient } from "..";
 import { NotFoundException } from "../exceptions/not-found";
 import { FoundException } from "../exceptions/found";
-import { ErrorCode } from "../exceptions/root";
 import { BadRequestException } from "../exceptions/bad-request";
 import { UpdatePermissionSchema } from "../schemas/permiso-schema";
 
@@ -58,7 +57,7 @@ export const findRoleById = async (req: Request,res: Response,next: NextFunction
         }
     })
     if(!rol){
-        throw new NotFoundException("Error Rol No encontrado..",ErrorCode.ROL_NO_ENCONTRADO);
+        throw new NotFoundException("Error Rol No encontrado..");
     }
     res.json(rol);
 }
@@ -78,8 +77,7 @@ export const addPermissionToRole = async (req: Request,res: Response,next: NextF
       const validatedData = UpdatePermissionSchema.parse(req.body);
     } catch (error) {
       throw new BadRequestException(
-        "Error...Formato no valido...",
-        ErrorCode.PERMISO_FORMATO_NO_VALIDO
+        "Error...Formato no valido..."
       );
     }
        const { id } = req.body;
@@ -88,7 +86,7 @@ export const addPermissionToRole = async (req: Request,res: Response,next: NextF
             where:{id}
         })
         if(!existePermisoEnBd){
-            throw new NotFoundException("Error..Permiso no Encontrado...",ErrorCode.PERMISO_NOT_FOUND);
+            throw new NotFoundException("Error..Permiso no Encontrado...");
         }
        // console.log(validatedData);
           // Validamos el ID del rol
@@ -104,7 +102,7 @@ export const addPermissionToRole = async (req: Request,res: Response,next: NextF
 
         //si existe entonces no podemos duplicar el mismo permiso
         if(existePermisoAsignadoAlRol){
-            throw new FoundException("Error..El Permiso ya esta registrado en el sistema..", ErrorCode.PERMISO_YA_REGISTRADO);
+            throw new FoundException("Error..El Permiso ya esta registrado en el sistema..");
         }
 
         //si no existe el permiso entonces lo agregamos
@@ -138,7 +136,7 @@ export const deletePermissionToRole = async (req: Request,res: Response,next: Ne
 
         //si existe entonces no podemos duplicar el mismo permiso
         if(!existsPermission){
-            throw new NotFoundException("Error..permiso no encontrado..", ErrorCode.PERMISO_NOT_FOUND);
+            throw new NotFoundException("Error..permiso no encontrado..");
         }
         //si no existe el permiso entonces lo agregamos
         
@@ -155,6 +153,6 @@ export const deletePermissionToRole = async (req: Request,res: Response,next: Ne
         })
         res.json({message: "Permiso Eliminado con exito"});
     } catch (error) {
-        throw new BadRequestException("Error...Formato no valido...",ErrorCode.PERMISO_FORMATO_NO_VALIDO);
+        throw new BadRequestException("Error...Formato no valido...");
     }
 }
