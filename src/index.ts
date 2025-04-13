@@ -14,8 +14,8 @@ app.use(corsMiddleware);
 //app.use(cookieParser());
 //para las request que tengan un formato json
 app.use(express.json());
-//para el form-data
-//app.use(express.urlencoded({ extended: true }));
+// para el form-data
+// app.use(express.urlencoded({ extended: true }));
 
 //ruta principal clave
 app.use('/api',rootRouter);

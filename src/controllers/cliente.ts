@@ -12,7 +12,7 @@ import { usuarioObserver } from "../services/bitacora-observer";
 export const registrarCliente = async (req: Request, res: Response,next: NextFunction) => {
   // capturamos los datos que vienen del request
 
-  const { email, nombre, password, fecha_nacimiento, telefono } = req.body;
+  const { email, nombre, password, fecha_nacimiento, telefono, url_profile } = req.body;
   
   let usuario = await prismaClient.usuario.findUnique({
     where: { email },
@@ -45,6 +45,7 @@ export const registrarCliente = async (req: Request, res: Response,next: NextFun
       username: generarUsername(nombre),
       rolId: rol.id,
       password: hashSync(password, 10),
+      profile_icon: url_profile,
     },
   });
 
@@ -58,15 +59,25 @@ export const registrarCliente = async (req: Request, res: Response,next: NextFun
       fechaNacimiento:fecha_nacimiento,
       telefono,
       usuarioId: usuario.id
-    }
+    },
+    include:{
+      usuario:true
+      }
   })
   //registramos el registro de usuario en la bitacora
   usuarioObserver.emit("registrarABitacoraDeUsuario", bitacoraUser);
 
   //destructuramos para que retorne un objeto sin contrasenia
-  const { password: __, ...usuarioSinPassword } = usuario;
+  
+  const { password: __, ...usuarioSinPassword } = cliente.usuario;
 
-  res.json(cliente);
+  const clienteUsuarioLimpio = {
+    ...cliente,
+    usuario: usuarioSinPassword,
+  };
+
+  res.json(clienteUsuarioLimpio);
+
 }
 
 

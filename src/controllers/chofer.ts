@@ -20,7 +20,7 @@ export const registrarChofer = async (
 ) => {
   // capturamos los datos que vienen del request
 
-  const { email, nombre, password, ci, direccion,estado } = req.body;
+  const { email, nombre, password, ci, direccion,estado,url_profile } = req.body;
 
   let usuario = await prismaClient.usuario.findUnique({
     where: { email },
@@ -46,7 +46,9 @@ export const registrarChofer = async (
       username: generarUsername(nombre),
       rolId: rol.id,
       password: hashSync(password, 10),
+      profile_icon: url_profile,
     },
+   
   });
 
   const ipUsuario: string = captureIpUser(req);
@@ -65,9 +67,20 @@ export const registrarChofer = async (
       direccion,
       estado: estado == "DISPONIBLE"? "D":"N",
       usuarioId: usuario.id,
-    },
+    },include:{
+      usuario:true
+    }
   });
   //registramos el registro de usuario en la bitacora
   usuarioObserver.emit("registrarABitacoraDeUsuario", bitacoraUser);
-  res.json(chofer);
+
+  
+  const { password: __, ...usuarioSinPassword } = chofer.usuario;
+
+  const choferConUsuarioLimpio = {
+    ...chofer,
+    usuario: usuarioSinPassword,
+  };
+
+  res.json(choferConUsuarioLimpio);
 };

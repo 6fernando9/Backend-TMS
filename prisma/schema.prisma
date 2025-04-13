@@ -25,7 +25,7 @@ model Usuario {
   email       String       @unique
   password    String       
   rolId       Int          @map("rol_id")
-  profile_icon String?     @db.VarChar(60)
+  profile_icon String?     
   createdAt   DateTime     @default(now()) @map("created_at")
   updatedAt   DateTime     @updatedAt      @map("updated_at")
   rol         Rol          @relation(fields: [rolId], references: [id])

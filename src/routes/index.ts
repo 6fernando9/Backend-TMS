@@ -18,5 +18,5 @@ rootRouter.use('/permisos',permisoRouter);
 rootRouter.use('/cliente',clienteRouter)
 rootRouter.use("/chofer", choferRouter);
 rootRouter.use('/usuarios',usuarioRooter);
-rootRouter.use('vehiculo',vehRouter)
+rootRouter.use('/vehiculo',vehRouter)
 export default rootRouter;

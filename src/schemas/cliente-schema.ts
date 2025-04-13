@@ -6,7 +6,8 @@ export const ClienteRegisterSchema = z.object({
   password: z.string().min(4, "Contraseña mínima de 6 caracteres"),
   fecha_nacimiento: z.string().min(1,"Fecha Requerida"),
   telefono: z.string().min(1,"Telefono requerido"),
-  direccion:z.string().min(1,"direccion requerida")
+  // direccion:z.string().min(1,"direccion requerida"),
+  url_profile: z.string()
 }).strict();
 
 
