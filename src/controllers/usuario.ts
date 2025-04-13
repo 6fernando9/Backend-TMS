@@ -12,16 +12,16 @@ export const UpdateAuthenticatedUser = async (req: Request, res: Response,next: 
     } catch (error) {
         throw new BadRequestException("Error datos no validos..");
     }
-    const { nombre, email, password, rol_id } = req.body;
-    console.log(nombre,email)
+    const { nombre, email, username, rol_id } = req.body;
+    console.log(nombre,email,username)
     //verificamos si la contra cambio
-    const passwordMatch = await compare(password, req.usuario!.password);
-    if (!passwordMatch) {
-        console.log('la contra del usuario a cambiado')
+    // const passwordMatch = await compare(password, req.usuario!.password);
+    // if (!passwordMatch) {
+    //     console.log('la contra del usuario a cambiado')
 
-    }else{
-        console.log("la contra del usuario a se mantuvo");
-    }
+    // }else{
+    //     console.log("la contra del usuario a se mantuvo");
+    // }
     const rol_idNumerico = Number(rol_id);
     //verificamos si el nuevo rol
     const rol = await prismaClient.rol.findUnique({
@@ -39,8 +39,9 @@ export const UpdateAuthenticatedUser = async (req: Request, res: Response,next: 
         data:{
             nombre,
             email,
-            password: !passwordMatch ? hashSync(password, 10): req.usuario!.password,
-            rol_id: rol.id
+            // password: !passwordMatch ? hashSync(password, 10): req.usuario!.password,
+            username,
+            rolId: rol.id
         },include:{
             rol:true
         }

@@ -15,6 +15,7 @@ export const errorHandler = (method: AsyncHandler) => {
         } catch (error: any) {
             //si ocurre un error lo captura
             let exception: HttpException;
+            console.log(`log de error ${error}`)
             if(error instanceof HttpException){
                 console.log(`me lanze en HttpException> ${error}`)
                 exception = error;

@@ -6,7 +6,7 @@ import { HttpException } from "../exceptions/root";
 //el error personalizado no pasa nada
 export const errorMiddleware = (error: HttpException, req: Request, res: Response, next: NextFunction ) => {
     res.status(error.statusCode).json({
-        mensaje: error.message,
+        message: error.message,
         // : error., // aqui muestro el error personalizado
         // errores: error.errors,
         fecha: new Date().toISOString()

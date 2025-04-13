@@ -10,6 +10,7 @@ import { FoundException } from "../exceptions/found";
 import { usuarioObserver } from "../services/bitacora-observer";
 import { UnauthorizedException } from "../exceptions/unauthorized";
 import { BitacoraUser } from "../services/interfaces/bitacora-user";
+import { RegisterSchema } from "../schemas/user-schema";
 
 
 
@@ -83,35 +84,39 @@ export const login = async (req: Request, res: Response) => {
 //metodo de registro de usuarios
 export const register = async (req: Request, res: Response,next: NextFunction) => {
   // capturamos los datos que vienen del request
+
   const { email, nombre, password } = req.body;
   let usuario = await prismaClient.usuario.findUnique({
     where: { email },
   });
+
+  
   if (usuario) {
-    next(
-      new FoundException(
+    throw new FoundException(
         "Error..usuario ya esta registrado en el sistema")
-    );
+
   }
   //si no existe entonces lo creamos
+
+
 
   //primero buscamos el rol por defecto
   const rol = await findRolByName(Roles.USUARIO);
 
   if (!rol) {
-    next(
-      new NotFoundException(
+      throw new NotFoundException(
         "Error Rol No encontrado...",
       )
-    );
-    return;
+    
   }
   //creamos el usuario
+  console.log(req.body)
   usuario = await prismaClient.usuario.create({
     data: {
       nombre,
       email,
-      rol_id: rol.id,
+      username: generarUsername(nombre),
+      rolId: rol.id,
       password: hashSync(password, 10),
     },
   });
@@ -128,6 +133,13 @@ export const register = async (req: Request, res: Response,next: NextFunction) =
   res.json(usuarioSinPassword);
 }
 
+
+function generarUsername(nombre: string): string {
+  const primerNombre = nombre.trim().split(" ")[0]; 
+  return (
+    primerNombre.charAt(0).toUpperCase() + primerNombre.slice(1).toLowerCase()
+  );
+}
 
 //metodo para obtener el usuario de la cookie?
 export const getUser = async (req: Request,res: Response,next: NextFunction) => {
