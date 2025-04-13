@@ -12,7 +12,7 @@ import { NotFoundException } from "../exceptions/not-found";
 ///esto podria modificarse
 const authMiddleware = async (req: Request,res: Response, next: NextFunction) => {
     //primero extraemos el token del header
-    const token = req.headers.authorization;
+    let token = req.headers.authorization;
 
     //si el token no esta presente tiramos una exception
     if(!token){//crearemos una exception
@@ -22,6 +22,8 @@ const authMiddleware = async (req: Request,res: Response, next: NextFunction) =>
     //si esta presente, entonces lo decodificaremos
     try {
         //extraemos el payload
+          // 🔍 Soporta ambos formatos: "Bearer <token>" y "<token>"
+        token = token.startsWith("Bearer ") ? token.split(" ")[1] : token;
         const payload = jwt.verify(token!,JWT_SECRET_KEY) as any;
 
         //obtendremos al usuario del jwt

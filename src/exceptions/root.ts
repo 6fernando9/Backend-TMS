@@ -15,7 +15,7 @@ export class HttpException extends Error {
   }
 }
 export enum Roles{
-    ADMIN= "ADMIN",USUARIO = "USUARIO",TRABAJADOR = "TRABAJADOR"
+    ADMIN= "ADMINISTRADOR",USUARIO = "USUARIO",CLIENTE = "CLIENTE",AYUDANTE = "AYUDANTE",CHOFER="CHOFER"
 }
 
 export enum TipoSesion{

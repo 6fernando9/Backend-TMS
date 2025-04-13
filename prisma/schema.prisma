@@ -24,15 +24,26 @@ model Usuario {
   nombre      String      @db.VarChar(50)
   email       String       @unique
   password    String       
-  telefono String?
   rolId       Int          @map("rol_id")
   profile_icon String?     @db.VarChar(60)
   createdAt   DateTime     @default(now()) @map("created_at")
   updatedAt   DateTime     @updatedAt      @map("updated_at")
   rol         Rol          @relation(fields: [rolId], references: [id])
   chofer      Chofer? 
-
+  cliente     Cliente?
   @@map("usuarios")
+}
+
+model Cliente{
+  id Int @id @default(autoincrement())  
+  telefono String? @db.VarChar(20)
+  fechaNacimiento String? @db.VarChar(30) @map("fecha_nacimiento")
+  usuarioId Int @unique @map("usuario_id")
+  direccion String? @db.VarChar(40)
+  usuario Usuario @relation(fields:[usuarioId],references:[id])
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt      @map("updated_at")
+  @@map("clientes")
 }
 
 model Chofer{

@@ -94,7 +94,6 @@ export const register = async (req: Request, res: Response,next: NextFunction) =
   if (usuario) {
     throw new FoundException(
         "Error..usuario ya esta registrado en el sistema")
-
   }
   //si no existe entonces lo creamos
 
@@ -134,7 +133,7 @@ export const register = async (req: Request, res: Response,next: NextFunction) =
 }
 
 
-function generarUsername(nombre: string): string {
+export function generarUsername(nombre: string): string {
   const primerNombre = nombre.trim().split(" ")[0]; 
   return (
     primerNombre.charAt(0).toUpperCase() + primerNombre.slice(1).toLowerCase()
@@ -158,7 +157,7 @@ export const getUser = async (req: Request,res: Response,next: NextFunction) => 
 // };
 
 
-const findRolByName = async (nombre: string) => {
+export const findRolByName = async (nombre: string) => {
   
   const rol = await prismaClient.rol.findFirst({
     where:{
@@ -168,7 +167,7 @@ const findRolByName = async (nombre: string) => {
   return rol;
 } 
 
-const captureIpUser = (req: Request): string => {
+export const captureIpUser = (req: Request): string => {
   let ipUsuario = req.ip;
   console.log(`req.ip: ${req.ip}`);
   // 📌 Si hay un proxy, tomar la IP real del usuario
@@ -182,7 +181,7 @@ const captureIpUser = (req: Request): string => {
   return ipUsuario;
 }
 
-const createBitacoraUser = (usuarioId: number, nombre: string, ip: string, tipo_sesion: string): BitacoraUser => {
+export const createBitacoraUser = (usuarioId: number, nombre: string, ip: string, tipo_sesion: string): BitacoraUser => {
     const bitacoraUser: BitacoraUser = {
       usuarioId,nombre,ip,tipo_sesion
     }
