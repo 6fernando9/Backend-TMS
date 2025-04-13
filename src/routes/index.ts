@@ -5,6 +5,7 @@ import permisoRouter from "./permisos-router";
 import usuarioRooter from "./usuario-router";
 import clienteRouter from "./cliente";
 import choferRouter from "./chofer";
+import vehRouter from "./vehiculo";
 
 const rootRouter: Router = Router();
 
@@ -17,5 +18,5 @@ rootRouter.use('/permisos',permisoRouter);
 rootRouter.use('/cliente',clienteRouter)
 rootRouter.use("/chofer", choferRouter);
 rootRouter.use('/usuarios',usuarioRooter);
-
+rootRouter.use('vehiculo',vehRouter)
 export default rootRouter;
