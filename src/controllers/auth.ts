@@ -210,7 +210,7 @@ export const getBitacora= async (req:Request,res:Response)=>{
         };
       })
     );
-    res.status(500).json(bitacoraMap)
+    res.status(200).json(bitacoraMap)
   } catch (error) {
     res.status(500).json({error})
   }
