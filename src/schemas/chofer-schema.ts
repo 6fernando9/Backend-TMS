@@ -8,7 +8,7 @@ export const ChoferRegisterSchema = z
     direccion: z.string().min(1, "direccion Requerida"),
     estado: z.string().min(1, "estado requerido"),
     ci: z.string().min(4, "ci requerida"),
-    url_profile: z.string(),
+    url_profile: z.string().optional(),
   })
   .strict();
 

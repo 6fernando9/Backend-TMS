@@ -7,7 +7,7 @@ export const ClienteRegisterSchema = z.object({
   fecha_nacimiento: z.string().min(1,"Fecha Requerida"),
   telefono: z.string().min(1,"Telefono requerido"),
   // direccion:z.string().min(1,"direccion requerida"),
-  url_profile: z.string()
+  url_profile: z.string().optional()
 }).strict();
 
 
