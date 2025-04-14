@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUser, login, register } from "../controllers/auth";
+import { getBitacora, getUser, login, register } from "../controllers/auth";
 import { errorHandler } from "../error-handler";
 import authMiddleware from "../middlewares/auth";
 import { validate } from "../middlewares/validation";
@@ -13,5 +13,6 @@ const authRouter: Router = Router();
 authRouter.post('/register',validate(RegisterSchema),errorHandler(register));
 authRouter.post('/login',errorHandler(login));
 authRouter.get("/me", [authMiddleware],errorHandler(getUser));
+authRouter.get("/getBitacora",getBitacora)
 
 export default authRouter;

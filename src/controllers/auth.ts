@@ -187,3 +187,32 @@ export const createBitacoraUser = (usuarioId: number, nombre: string, ip: string
     }
     return bitacoraUser;
 }
+
+
+export const getBitacora= async (req:Request,res:Response)=>{
+  try {
+    const registroBitacora= await prismaClient.bitacora_usuario.findMany();
+    const bitacoraMap = await Promise.all(
+      registroBitacora.map(async (r) => {
+        const usuario = await prismaClient.usuario.findUnique({
+          where: { id: r.usuarioId },
+          select: { email: true }, // Solo selecciona el campo que necesitas
+        });
+
+        return {
+          id: r.id,
+          id_usuario: r.usuarioId,
+          ip: r.ip,
+          correo: usuario?.email || "No encontrado",
+          nombre: r.username,
+          fecha: r.createdAt,
+          hora: r.updatedAt,
+        };
+      })
+    );
+    res.status(500).json(bitacoraMap)
+  } catch (error) {
+    res.status(500).json({error})
+  }
+
+}
